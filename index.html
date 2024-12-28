@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sin.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        #chat {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            background: white;
+            margin-bottom: 10px;
+        }
+        #input {
+            margin-top: 10px;
+        }
+        #message {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>دردشة </h1>
+<div id="chat"></div>
+<div id="input">
+    <input type="text" id="message" placeholder="اكتب..  " autocomplete="off" />
+    <button id="send">إرسال</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('message');
+    const sendButton = document.getElementById('send');
+
+    sendButton.onclick = () => {
+        const msg = input.value;
+        socket.emit('chat message', msg);
+        input.value = '';
+    };
+
+    socket.on('chat message', (msg) => {
+        const item = document.createElement('div');
+        item.textContent = msg;
+        chat.appendChild(item);
+        chat.scrollTop = chat.scrollHeight;
+    });
+</script>
+
+</body>
+</html>
